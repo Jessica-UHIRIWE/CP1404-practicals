@@ -15,5 +15,4 @@ def main():
 
 
 # Call the main function to execute the program
-if __name__ == "__main__":
-    main()
+main()
