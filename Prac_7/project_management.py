@@ -4,7 +4,6 @@ import os
 from datetime import datetime
 from project import Project
 
-
 def load_projects(filename):
     """Load projects from a file."""
     projects = []
@@ -16,15 +15,12 @@ def load_projects(filename):
             projects.append(project)
     return projects
 
-
 def save_projects(filename, projects):
     """Save projects to a file."""
     with open(filename, 'w') as file:
         file.write("Name\tStart Date\tPriority\tCost Estimate\tCompletion Percentage\n")
         for project in projects:
-            file.write(
-                f"{project.name}\t{project.start_date.strftime('%d/%m/%Y')}\t{project.priority}\t{project.cost_estimate}\t{project.completion}\n")
-
+            file.write(f"{project.name}\t{project.start_date.strftime('%d/%m/%Y')}\t{project.priority}\t{project.cost_estimate}\t{project.completion}\n")
 
 def display_projects(projects):
     """Display projects sorted by completion status and priority."""
@@ -39,7 +35,6 @@ def display_projects(projects):
     for project in completed_projects:
         print(f"  {project}")
 
-
 def filter_projects_by_date(projects, date):
     """Display projects that start after a given date."""
     filtered_projects = [p for p in projects if p.start_date > date]
@@ -47,7 +42,6 @@ def filter_projects_by_date(projects, date):
 
     for project in filtered_projects:
         print(project)
-
 
 def add_new_project():
     """Add a new project based on user input."""
@@ -58,7 +52,6 @@ def add_new_project():
     completion = input("Percent complete: ")
 
     return Project(name, start_date, priority, cost_estimate, completion)
-
 
 def update_project(projects):
     """Update an existing project."""
@@ -75,13 +68,18 @@ def update_project(projects):
 
     project.update(completion=new_completion or None, priority=new_priority or None)
 
-
 def main():
     """Main function to manage projects."""
-    FILENAME = 'projects.txt'
+    FILENAME = 'project.txt'
+    # If the file is not in the same directory, provide the absolute path
+    # FILENAME = 'C:/Users/user/Desktop/Trimester 2/CP 1404/Prac_7/project.txt'
 
-    projects = load_projects(FILENAME)
-    print(f"Loaded {len(projects)} projects from {FILENAME}")
+    try:
+        projects = load_projects(FILENAME)
+        print(f"Loaded {len(projects)} projects from {FILENAME}")
+    except FileNotFoundError:
+        print(f"Error: The file {FILENAME} was not found.")
+        return
 
     menu = """
     - (L)oad projects  
@@ -99,7 +97,10 @@ def main():
 
         if choice == 'l':
             filename = input("Filename to load from: ")
-            projects = load_projects(filename)
+            try:
+                projects = load_projects(filename)
+            except FileNotFoundError:
+                print(f"Error: The file {filename} was not found.")
         elif choice == 's':
             filename = input("Filename to save to: ")
             save_projects(filename, projects)
@@ -120,7 +121,6 @@ def main():
                 save_projects(FILENAME, projects)
 
     print("Thank you for using custom-built project management software.")
-
 
 if __name__ == "__main__":
     main()
